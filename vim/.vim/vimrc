@@ -1,0 +1,5 @@
+source ~/.vim/keybinds.vim
+source ~/.vim/plugins.vim
+source ~/.vim/lightline.vim
+source ~/.vim/options.vim
+source ~/.vim/colors.vim

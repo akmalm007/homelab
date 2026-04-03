@@ -1,0 +1,7 @@
+-- This file will be executed when MySQL container starts for the first time
+-- Add any initialization SQL here
+
+-- Example: Create additional users, set permissions, etc.
+-- CREATE USER 'readonly'@'%' IDENTIFIED BY 'password';
+-- GRANT SELECT ON staging_db.* TO 'readonly'@'%';
+-- FLUSH PRIVILEGES;

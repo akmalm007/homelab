@@ -1,0 +1,54 @@
+services:
+  mysql-staging:
+    image: mysql:8
+    container_name: mysql-staging
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - mysql_staging_data:/var/lib/mysql
+      - ./backups:/backups
+    networks:
+      - staging-db-network
+    # Expose the the port for host
+    # ports:
+    # - 3306:3306
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: phpmyadmin-staging
+    restart: unless-stopped
+    environment:
+      PMA_HOST: mysql-staging
+      PMA_PORT: 3306
+      PMA_ABSOLUTE_URI: https://${DOMAIN}/
+      # Security settings
+      PMA_AUTH_TYPE: cookie
+      PMA_USER: root
+      PMA_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      # Disable root login without password
+      PMA_NO_ROOT_PASSWORD: 0
+      # Session timeout (30 minutes)
+      SESSION_TIMEOUT: 1800
+      # Enable SSL for phpMyAdmin internal connections
+      PMA_SSL: 1
+      PMA_SSL_VERIFY: 1
+    networks:
+      - staging-db-network
+    # No ports exposed - accessed via nginx reverse proxy
+    # You expose the port if need
+    ports:
+      - 8080:80
+
+volumes:
+  mysql_staging_data:
+    driver: local
+
+networks:
+  staging-db-network:
+    driver: bridge
+    internal: false # Allow nginx to connect, but no external ports
+

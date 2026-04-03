@@ -1,0 +1,30 @@
+services:
+  runner-local:
+    image: docker.io/gitea/act_runner:latest
+    # restart: unless-stopped
+    environment:
+      CONFIG_FILE: /config.yaml
+      GITEA_INSTANCE_URL: "${GITEA_URL}"
+      GITEA_RUNNER_REGISTRATION_TOKEN: "${RUNNER_TOKEN}"
+      GITEA_RUNNER_NAME: "Local Runner 1"
+      GITEA_RUNNER_LABELS: "${RUNNER_LABELS}"
+    volumes:
+      - ./runner-1/data:/data
+      - ./runner-1/config.yaml:/config.yaml
+      - ./cache:/root/.cache
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  runner-vocasia:
+    image: docker.io/gitea/act_runner:latest
+    # restart: unless-stopped
+    environment:
+      CONFIG_FILE: /config.yaml
+      GITEA_INSTANCE_URL: "http://192.168.1.100:3000/"
+      GITEA_RUNNER_REGISTRATION_TOKEN: "nJqX9Yp91E6Ks9cpiqDJN2tGNlNR2xRjwo9EdAx7"
+      GITEA_RUNNER_NAME: "Vocasia Runner"
+      GITEA_RUNNER_LABELS: "${RUNNER_LABELS}"
+    volumes:
+      - ./runner-3/data:/data
+      - ./runner-3/config.yaml:/config.yaml
+      - ./cache:/root/.cache
+      - /var/run/docker.sock:/var/run/docker.sock
