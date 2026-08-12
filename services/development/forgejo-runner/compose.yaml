@@ -1,1 +1,10 @@
-
+services:
+  forgejo-action:
+    image: code.forgejo.org/forgejo/runner:12
+    container_name: forgejo-action
+    volumes:
+      - /home/garnet/development/forgejo-action/config.yml:config.yml
+      - /home/garnet/development/forgejo-action/forgejo-docker:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: always
+    command: "forgejo-runner --config /config.yml daemon"

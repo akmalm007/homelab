@@ -1,0 +1,22 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  namespace: production
+  name: primary-gateway
+  labels:
+    suite: application
+spec:
+  gatewayClassName: envoy-gatewayclass
+  listeners:
+    - name: http
+      port: 8080
+      protocol: HTTP
+    # - name: https
+    #   port: 8443
+    #   protocol: HTTPS
+    # hostname: blog.akmalmaulana.gg
+    #   tls:
+    #     mode: Terminate
+    #     certificateRefs:
+    #       - kind: Secret
+    #         name: tls-akmalmaulana-gg

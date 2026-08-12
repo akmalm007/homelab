@@ -1,0 +1,22 @@
+[Unit]
+Descrition=Grafana Dashboard
+
+[Container]
+ContainerName=grafana
+Image=docker.io/grafana/grafana:latest
+PublishPort=127.0.0.1:3001:3001
+Network=caddy_nets
+HostName=grafana
+Environment=GF_SECURITY_ADMIN_USER=admin
+Environment=GF_SECURITY_ADMIN_PASSWORD=grafana
+Volume=/home/garnet/containers/monitoring/grafana:/etc/grafana/provisioning/datasources
+Volume=grafana-data:/var/lib/grafana
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target
+
+
+

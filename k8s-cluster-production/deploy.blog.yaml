@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: blog
+    akmalmaulana.net/blog: personal-website
+  name: personal-website
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: blog
+      akmalmaulana.net/blog: personal-website
+  template:
+    metadata:
+      labels:
+        app: blog
+        akmalmaulana.net/blog: personal-website
+    spec:
+      containers:
+        - image: git.akmalmaulana.net/akmalm007/personal-website:latest
+          imagePullPolicy: Always
+          name: blog
+          ports:
+            - name: http
+              containerPort: 80

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: forgejo-config
+  labels:
+    app: forgejo
+data:
+  USER_UID: "1000"
+  USER_GID: "1000"
+  # FORGEJO__server__SSH_PORT: "2222"
+  # FORGEJO__server__SSH_LISTEN_PORT: "2222"
+  FORGEJO__ui__DEFAULT_THEME: "forgejo-dark"
+  FORGEJO__ui__THEMES: "forgejo-dark"
+  # FORGEJO__server__URL_ROOT_PATH: "https://forgejo.akmalmaulana.net"

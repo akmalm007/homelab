@@ -1,0 +1,12 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhistcnt =5
+let g:netrw_dirhist_5='/workspace/_pages'
+let g:netrw_dirhist_4='/workspace'
+let g:netrw_dirhist_3='/workspace/_layout'
+let g:netrw_dirhist_2='/workspace'
+let g:netrw_dirhist_1='/workspace/_pages'
+let g:netrw_dirhist_0='/workspace'
+let g:netrw_dirhist_9='/workspace/_data'
+let g:netrw_dirhist_8='/'
+let g:netrw_dirhist_7='/workspace'
+let g:netrw_dirhist_6='/workspace/vim'

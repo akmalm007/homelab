@@ -1,0 +1,9 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: local-staging
+  labels:
+    storage: local
+allowVolumeExpansion: true
+provisioner: kubernetes.io/no-provisioner
+reclaimPolicy: Retain

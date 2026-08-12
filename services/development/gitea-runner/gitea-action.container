@@ -9,7 +9,7 @@ EnvironmentFile=/home/garnet/development/gitea-action/env
 Volume=/home/garnet/development/gitea-action/runner-1/data:/data
 Volume=/home/garnet/development/gitea-action/runner-1/config.yaml:/config.yaml
 Volume=/home/garnet/development/gitea-action/runner-1/cache:/root/.cache
-Volume=/run/user/1000/podman/podman.sock:/var/run/docker.sock
+Volume=/var/run/docker.sock:/var/run/docker.sock
 
 [Service]
 Restart=always

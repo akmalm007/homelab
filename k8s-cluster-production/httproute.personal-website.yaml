@@ -1,0 +1,14 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  namespace: production
+  name: personal-website
+spec:
+  parentRefs:
+    - name: primary-gateway
+  hostnames:
+    - blog.akmalmaulana.net
+  rules:
+    - backendRefs:
+        - name: personal-website
+          port: 80

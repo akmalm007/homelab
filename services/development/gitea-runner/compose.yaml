@@ -14,6 +14,21 @@ services:
       - ./cache:/root/.cache
       - /var/run/docker.sock:/var/run/docker.sock
 
+  runner-emergency:
+    image: docker.io/gitea/act_runner:latest
+    # restart: unless-stopped
+    environment:
+      CONFIG_FILE: /config.yaml
+      GITEA_INSTANCE_URL: "http://10.58.8.84:3000/"
+      GITEA_RUNNER_REGISTRATION_TOKEN: "nJqX9Yp91E6Ks9cpiqDJN2tGNlNR2xRjwo9EdAx7"
+      GITEA_RUNNER_NAME: "Emegerncy Runner"
+      GITEA_RUNNER_LABELS: "${RUNNER_LABELS}"
+    volumes:
+      - ./runner-2/data:/data
+      - ./runner-2/config.yaml:/config.yaml
+      - ./cache:/root/.cache
+      - /var/run/docker.sock:/var/run/docker.sock
+
   runner-vocasia:
     image: docker.io/gitea/act_runner:latest
     # restart: unless-stopped

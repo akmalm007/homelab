@@ -1,0 +1,128 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: forgejo-action
+  labels:
+    app: forgejo-action
+    git.akmalmaulana.net/forgejo-action: forgejo-action
+    component: forgejo-runner
+spec:
+  nodeSelector:
+    kubernetes.io/hostname: pyroath-worker-node
+  securityContext:
+    fsGroup: 1001
+  initContainers:
+    - name: init-dir
+      image: busybox:1.35
+      command:
+        - sh
+        - -c
+        - |
+          mkdir -p /data/.cache
+          chown -R 1001:1001 /data
+          chmod -R g+rwX /data
+          find /data -type d -exec chmod g+s {} +
+      volumeMounts:
+        - name: forgejo-action-data
+          mountPath: /data
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+    - name: init-register
+      image: code.forgejo.org/forgejo/runner:13
+      command:
+        - sh
+        - -c
+        - |
+          if [ -f /data/.runner ]; then
+            echo ".runner exist"
+            exit 0
+          fi
+          forgejo-runner register \
+            --no-interactive \
+            --instance "$INSTANCE_URL" \
+            --token "$TOKEN" \
+            --name "$POD_NAME" \
+            --labels "$LABELS"
+      volumeMounts:
+        - name: forgejo-action-data
+          mountPath: /data
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+      env:
+        - name: INSTANCE_URL
+          valueFrom:
+            secretKeyRef:
+              name: forgejo-action-secret
+              key: url
+        - name: TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: forgejo-action-secret
+              key: token
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: LABELS
+          valueFrom:
+            configMapKeyRef:
+              name: forgejo-action-config
+              key: labels
+
+  containers:
+    - name: forgejo-runner
+      image: code.forgejo.org/forgejo/runner:13
+      volumeMounts:
+        - name: forgejo-action-data
+          mountPath: /data
+        - name: forgejo-action-config
+          mountPath: /data/runner-config.yaml
+          subPath: runner-config.yaml
+      command: ["forgejo-runner", "daemon", "--config", "runner-config.yaml"]
+      env:
+        - name: DOCKER_HOST
+          value: tcp://forgejo-action:2375
+    - name: docker-dind
+      image: docker:dind
+      command: ["dockerd", "-H", "tcp://0.0.0.0:2375", "--tls=false"]
+      ports:
+        - name: tcp
+          containerPort: 2375
+          protocol: TCP
+      securityContext:
+        privileged: true
+  volumes:
+    - name: forgejo-action-data
+      persistentVolumeClaim:
+        claimName: forgejo-action-data
+    - name: forgejo-action-config
+      configMap:
+        name: forgejo-action-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: forgejo-action
+  labels:
+    app: forgejo-action
+    git.akmalmaulana.net/forgejo-action: forgejo-action
+    component: forgejo-runner
+spec:
+  clusterIP: None
+  selector:
+    app: forgejo-action
+  ports:
+    - name: tcp
+      protocol: TCP
+      port: 2375
+      targetPort: 2375
+---
+apiVersion: v1
+data:
+  token: Nno2VXE3LVVaQnZhejVpS3NuWjhsMWtEV1NQeDhaVE9zMDVOWE5JNWJBMQ==
+  url: aHR0cDovL2Zvcmdlam86MzAwMA==
+kind: Secret
+metadata:
+  name: forgejo-action-secret

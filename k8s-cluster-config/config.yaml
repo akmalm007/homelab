@@ -1,0 +1,5 @@
+write-kubeconfig-mode: "0644"
+tls-san:
+  - 10.0.10.2
+disable:
+  - traefik

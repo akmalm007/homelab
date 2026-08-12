@@ -1,0 +1,16 @@
+[Container]
+ContainerName=forgejo
+Environment=USER_UID=1000
+Environment=USER_GID=1000
+Image=codeberg.org/forgejo/forgejo:14
+Network=forgejo.network
+PublishPort=3001:3000
+PublishPort=2223:22
+Volume=/home/garnet/development/forgejo:/data
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target
+

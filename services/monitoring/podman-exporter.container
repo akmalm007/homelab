@@ -1,0 +1,19 @@
+[Unit]
+Description=Podman Exporter
+
+[Container]
+ContainerName=podman-exporter
+Image=quay.io/navidys/prometheus-podman-exporter
+Environment=CONTAINER_HOST=unix:///run/podman/podman.sock 
+Volume=/run/user/1000/podman/podman.sock:/run/podman/podman.sock
+PublishPort=9882:9882
+UserNS=keep-id:65534
+SecurityLabelDisable=true
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target
+
+

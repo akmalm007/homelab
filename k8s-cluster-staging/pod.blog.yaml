@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: personal-website
+  labels:
+    app: blog
+    akmalmaulana.net/blog: personal-website
+spec:
+  containers:
+    - name: personal-website
+      image: akmalm007/blog:latest
+      imagePullPolicy: Always
+      ports:
+        - name: http
+          containerPort: 80

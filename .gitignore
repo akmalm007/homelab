@@ -1,2 +1,5 @@
 services/development/gitea-runner/cache/
 services/development/gitea-runner/runner-*
+PAT
+SECRET-TOKEN
+backups/
