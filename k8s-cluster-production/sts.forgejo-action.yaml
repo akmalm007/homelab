@@ -1,0 +1,172 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: forgejo-action
+  labels:
+    app: forgejo-action
+    git.akmalmaulana.net/forgejo: forgejo
+    component: forgejo-runner
+spec:
+  selector:
+    matchLabels:
+      app: forgejo-action
+      component: forgejo-runner
+  serviceName: "docker-dind"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: forgejo-action
+        component: forgejo-runner
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: cerberus
+      securityContext:
+        fsGroup: 1001
+      initContainers:
+        - name: init-dir
+          image: busybox:1.35
+          command:
+            - sh
+            - -c
+            - |
+              mkdir -p /data/.cache
+              chown -R 1001:1001 /data
+              chmod -R g+rwX /data
+              find /data -type d -exec chmod g+s {} +
+          volumeMounts:
+            - name: forgejo-action-data
+              mountPath: /data
+          securityContext:
+            runAsUser: 0
+            runAsGroup: 0
+        - name: init-register
+          image: code.forgejo.org/forgejo/runner:13
+          command:
+            - sh
+            - -c
+            - |
+              if [ -f /data/.runner ]; then
+                echo ".runner exist"
+                exit 0
+              fi
+              forgejo-runner register \
+                --no-interactive \
+                --instance "$INSTANCE_URL" \
+                --token "$TOKEN" \
+                --name "$POD_NAME" \
+                --labels "$LABELS"
+          volumeMounts:
+            - name: forgejo-action-data
+              mountPath: /data
+          securityContext:
+            runAsUser: 0
+            runAsGroup: 0
+          env:
+            - name: INSTANCE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: forgejo-action-secret
+                  key: url
+            - name: TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: forgejo-action-secret
+                  key: token
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: LABELS
+              valueFrom:
+                configMapKeyRef:
+                  name: forgejo-action-config
+                  key: labels
+      containers:
+        - name: forgejo-runner
+          image: code.forgejo.org/forgejo/runner:13
+          volumeMounts:
+            - name: forgejo-action-data
+              mountPath: /data
+            - name: forgejo-action-config
+              mountPath: /data/runner-config.yaml
+              subPath: runner-config.yaml
+          command:
+            ["forgejo-runner", "daemon", "--config", "runner-config.yaml"]
+          env:
+            - name: DOCKER_HOST
+              value: tcp://127.0.0.1:2375
+        - name: docker-dind
+          image: docker:dind
+          command:
+            - sh
+            - -c
+            - |
+              dockerd -H unix:///var/run/docker.sock -H tcp://0.0.0.0:2375 --tls=false --mtu=1450 &
+              DOCKERD_PID=$!
+
+              # Wait for the daemon to actually be ready before touching it
+              until docker version >/dev/null 2>&1; do
+                echo "waiting for dockerd..."
+                sleep 1
+              done
+
+              # Custom docker networks (which forgejo-runner creates fresh
+              # per-workflow-run) do NOT inherit dockerd's --mtu flag - that
+              # only applies to the default docker0 bridge. So we pre-create
+              # one persistent network with the correct MTU explicitly set,
+              # and point runner-config.yaml's container.network at it.
+              docker network inspect forgejo-actions >/dev/null 2>&1 || \
+                docker network create --opt com.docker.network.driver.mtu=1450 forgejo-actions
+
+              wait $DOCKERD_PID
+          ports:
+            - name: tcp
+              containerPort: 2375
+              protocol: TCP
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - name: dind-data
+              mountPath: /var/lib/docker
+      volumes:
+        - name: forgejo-action-config
+          configMap:
+            name: forgejo-action-config
+  volumeClaimTemplates:
+    - metadata:
+        name: dind-data
+      spec:
+        storageClassName: local-vps
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 10Gi
+    - metadata:
+        name: forgejo-action-data
+      spec:
+        storageClassName: local-vps
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 3Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: docker-dind
+  labels:
+    app: docker-dind
+    component: forgejo-runner
+spec:
+  clusterIP: None
+  selector:
+    app: forgejo-action
+    component: forgejo-runner
+  ports:
+    - name: tcp
+      protocol: TCP
+      port: 2375
+      targetPort: 2375

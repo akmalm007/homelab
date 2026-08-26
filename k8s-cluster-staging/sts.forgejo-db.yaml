@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: forgejo-db
+  labels:
+    app: database
+    git.akmalmaulana.net/forgejo: forgejo
+    component: database
+spec:
+  selector:
+    matchLabels:
+      app: database
+      git.akmalmaulana.net/forgejo: forgejo
+      component: database
+  serviceName: "postgres"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: database
+        git.akmalmaulana.net/forgejo: forgejo
+        component: database
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: pyroath-worker-node
+      containers:
+        - name: forgejo-db
+          image: postgres:18
+          ports:
+            - name: postgres
+              containerPort: 5432
+              protocol: TCP
+          volumeMounts:
+            - name: forgejo-db-data
+              mountPath: /var/lib/postgresql
+          envFrom:
+            - secretRef:
+                name: forgejo-db-secret
+  volumeClaimTemplates:
+    - metadata:
+        name: forgejo-db-data
+      spec:
+        storageClassName: local-staging
+        volumeName: database-pv
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 5Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+  labels:
+    app: database
+    git.akmalmaulana.net/forgejo: forgejo
+    component: database
+spec:
+  selector:
+    app: database
+  clusterIP: None
+  ports:
+    - name: postgres
+      protocol: TCP
+      port: 5432
+      targetPort: 5432

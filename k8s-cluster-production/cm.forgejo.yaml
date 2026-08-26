@@ -9,7 +9,10 @@ data:
   USER_GID: "1000"
   FORGEJO__ui__DEFAULT_THEME: "forgejo-dark"
   FORGEJO__ui__THEMES: "forgejo-dark"
-  # FORGEJO__server__URL_ROOT_PATH: "https://forgejo.akmalmaulana.net"
+  FORGEJO__server__URL_ROOT_PATH: "https://git.akmalmaulana.net"
+  FORGEJO__server__DOMAIN: "https://git.akmalmaulana.net"
+  FORGEJO__server__SSH_DOMAIN: "ssh.akmalmaulana.net"
+  FORGEJO__server__ROOT_URL: "https://git.akmalmaulana.net"
   # Database Config
   FORGEJO__database__DB_TYPE: postgres
   FORGEJO__database__HOST: postgres

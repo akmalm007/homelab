@@ -24,3 +24,9 @@ spec:
           ports:
             - name: http
               containerPort: 80
+          readinessProbe:
+            failureThreshold: 1
+            httpGet:
+              port: 80
+              path: /
+              scheme: HTTP

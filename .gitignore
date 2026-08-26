@@ -1,5 +1,8 @@
 services/development/gitea-runner/cache/
 services/development/gitea-runner/runner-*
+k8s-cluster-staging/secret/
+k8s-cluster-production/secret/
 PAT
 SECRET-TOKEN
 backups/
+logs/

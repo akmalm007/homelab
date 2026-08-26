@@ -20,7 +20,7 @@ spec:
         git.akmalmaulana.net/forgejo: forgejo
     spec:
       nodeSelector:
-        kubernetes.io/hostname: pyroath-worker-node
+        kubernetes.io/hostname: cerberus
       securityContext:
         fsGroup: 1000
       initContainers:
@@ -59,6 +59,8 @@ spec:
             - configMapRef:
                 name: forgejo-config
                 optional: true
+            - secretRef:
+                name: forgejo-secret
           readinessProbe:
             httpGet:
               port: 3000
@@ -68,7 +70,7 @@ spec:
     - metadata:
         name: forgejo-data
       spec:
-        storageClassName: local-staging
+        storageClassName: local-vps
         accessModes:
           - ReadWriteOnce
         resources:

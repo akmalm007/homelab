@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: forgejo-dind-pv
+spec:
+  storageClassName: local-vps
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 10Gi
+  local:
+    path: /mnt/kubernetes-volume/forgejo-action/dind
+  volumeMode: Filesystem
+  persistentVolumeReclaimPolicy: Retain
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - cerberus
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: forgejo-action-pv
+spec:
+  storageClassName: local-vps
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 3Gi
+  local:
+    path: /mnt/kubernetes-volume/forgejo-action/runner
+  volumeMode: Filesystem
+  persistentVolumeReclaimPolicy: Retain
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - cerberus
