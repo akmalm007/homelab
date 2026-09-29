@@ -19,8 +19,6 @@ spec:
         app: forgejo
         git.akmalmaulana.net/forgejo: forgejo
     spec:
-      nodeSelector:
-        kubernetes.io/hostname: cerberus
       securityContext:
         fsGroup: 1000
       initContainers:
@@ -70,7 +68,6 @@ spec:
     - metadata:
         name: forgejo-data
       spec:
-        storageClassName: local-vps
         accessModes:
           - ReadWriteOnce
         resources:

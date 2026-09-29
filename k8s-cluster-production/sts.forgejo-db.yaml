@@ -21,8 +21,6 @@ spec:
         git.akmalmaulana.net/forgejo: forgejo
         component: database
     spec:
-      nodeSelector:
-        kubernetes.io/hostname: cerberus
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000
@@ -45,7 +43,6 @@ spec:
     - metadata:
         name: forgejo-db-data
       spec:
-        storageClassName: local-vps
         accessModes:
           - ReadWriteOnce
         resources:

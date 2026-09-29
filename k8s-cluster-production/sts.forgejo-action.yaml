@@ -137,7 +137,6 @@ spec:
     - metadata:
         name: dind-data
       spec:
-        storageClassName: local-vps
         accessModes:
           - ReadWriteOnce
         resources:
@@ -146,7 +145,6 @@ spec:
     - metadata:
         name: forgejo-action-data
       spec:
-        storageClassName: local-vps
         accessModes:
           - ReadWriteOnce
         resources:
