@@ -1,6 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
+  namespace: production
   name: forgejo-action-config
 data:
   labels: docker:docker://code.forgejo.org/oci/node:20-bookworm,ubuntu-22.04:docker://ghcr.io/catthehacker/ubuntu:act-22.04,ubuntu-latest:docker://ghcr.io/catthehacker/ubuntu:act-24.04

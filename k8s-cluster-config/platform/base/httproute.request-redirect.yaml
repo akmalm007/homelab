@@ -1,0 +1,21 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  namespace: production
+  name: http-redirect-to-https
+spec:
+  parentRefs:
+    - name: envoy-gateway
+      sectionName: http
+  hostnames:
+    - "www.akmalmaulana.net"
+    - "akmalmaulana.net"
+    - "git.akmalmaulana.net"
+    - "argocd.akmalmaulana.net"
+  rules:
+    - filters:
+        - type: RequestRedirect
+          requestRedirect:
+            port: 443
+            scheme: https
+            statusCode: 301

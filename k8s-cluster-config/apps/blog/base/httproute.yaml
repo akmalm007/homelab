@@ -1,0 +1,15 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  namespace: production
+  name: personal-website
+spec:
+  parentRefs:
+    - name: envoy-gateway
+  hostnames:
+    - "www.akmalmaulana.net"
+    - "akmalmaulana.net"
+  rules:
+    - backendRefs:
+        - name: personal-website
+          port: 80

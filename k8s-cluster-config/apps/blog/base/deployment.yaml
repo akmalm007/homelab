@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - image: git.akmalmaulana.net/akmalm007/blog:latest
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           name: blog
           ports:
             - name: http

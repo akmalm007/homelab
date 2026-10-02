@@ -1,0 +1,81 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  namespace: production
+  name: envoy-gateway
+  labels:
+    suite: application
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production
+spec:
+  gatewayClassName: envoy-gatewayclass
+  listeners:
+    - name: http
+      port: 80
+      protocol: HTTP
+      allowedRoutes:
+        namespaces:
+          from: All
+    - name: https
+      port: 443
+      protocol: HTTPS
+      hostname: akmalmaulana.net
+      allowedRoutes:
+        namespaces:
+          from: All
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: akmalmaulana-net-tls
+            kind: Secret
+    - name: www
+      port: 443
+      protocol: HTTPS
+      hostname: www.akmalmaulana.net
+      allowedRoutes:
+        namespaces:
+          from: All
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: akmalmaulana-net-tls
+            kind: Secret
+    - name: forgejo
+      port: 443
+      protocol: HTTPS
+      hostname: git.akmalmaulana.net
+      allowedRoutes:
+        namespaces:
+          from: All
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: git-akmalmaulana-net-tls
+            kind: Secret
+    - name: forgejo-ssh
+      port: 2222
+      protocol: TCP
+    - name: uptime-kuma
+      port: 443
+      protocol: HTTPS
+      hostname: uptime.akmalmaulana.net
+      allowedRoutes:
+        namespaces:
+          from: All
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: uptime-akmalmaulana-net-tls
+            kind: Secret
+    - name: argocd
+      port: 443
+      protocol: HTTPS
+      hostname: argocd.akmalmaulana.net
+      allowedRoutes:
+        namespaces:
+          from: All
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: argocd-akmalmaulana-net-tls
+            kind: Secret
