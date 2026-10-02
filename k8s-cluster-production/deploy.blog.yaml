@@ -18,7 +18,7 @@ spec:
         akmalmaulana.net/blog: personal-website
     spec:
       containers:
-        - image: git.akmalmaulana.net/akmalm007/personal-website:latest
+        - image: git.akmalmaulana.net/akmalm007/blog:latest
           imagePullPolicy: Always
           name: blog
           ports:

@@ -19,69 +19,8 @@ spec:
         app: forgejo-action
         component: forgejo-runner
     spec:
-      nodeSelector:
-        kubernetes.io/hostname: cerberus
       securityContext:
         fsGroup: 1001
-      initContainers:
-        - name: init-dir
-          image: busybox:1.35
-          command:
-            - sh
-            - -c
-            - |
-              mkdir -p /data/.cache
-              chown -R 1001:1001 /data
-              chmod -R g+rwX /data
-              find /data -type d -exec chmod g+s {} +
-          volumeMounts:
-            - name: forgejo-action-data
-              mountPath: /data
-          securityContext:
-            runAsUser: 0
-            runAsGroup: 0
-        - name: init-register
-          image: code.forgejo.org/forgejo/runner:13
-          command:
-            - sh
-            - -c
-            - |
-              if [ -f /data/.runner ]; then
-                echo ".runner exist"
-                exit 0
-              fi
-              forgejo-runner register \
-                --no-interactive \
-                --instance "$INSTANCE_URL" \
-                --token "$TOKEN" \
-                --name "$POD_NAME" \
-                --labels "$LABELS"
-          volumeMounts:
-            - name: forgejo-action-data
-              mountPath: /data
-          securityContext:
-            runAsUser: 0
-            runAsGroup: 0
-          env:
-            - name: INSTANCE_URL
-              valueFrom:
-                secretKeyRef:
-                  name: forgejo-action-secret
-                  key: url
-            - name: TOKEN
-              valueFrom:
-                secretKeyRef:
-                  name: forgejo-action-secret
-                  key: token
-            - name: POD_NAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.name
-            - name: LABELS
-              valueFrom:
-                configMapKeyRef:
-                  name: forgejo-action-config
-                  key: labels
       containers:
         - name: forgejo-runner
           image: code.forgejo.org/forgejo/runner:13

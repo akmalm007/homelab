@@ -55,3 +55,15 @@ spec:
     - name: forgejo-ssh
       port: 2222
       protocol: TCP
+    - name: uptime-kuma
+      port: 443
+      protocol: HTTPS
+      hostname: uptime.akmalmaulana.net
+      allowedRoutes:
+        namespaces:
+          from: All
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: uptime-akmalmaulana-net-tls
+            kind: Secret
