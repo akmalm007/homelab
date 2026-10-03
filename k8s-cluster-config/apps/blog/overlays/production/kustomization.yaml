@@ -1,7 +1,8 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - ../../base
+- ../../base
 images:
-  - name: git.akmalmaulana.net/akmalm007/blog
-    newTag: abc123
+- name: git.akmalmaulana.net/akmalm007/blog
+  newName: git.akmalmaulana.net/akmalm007/blog
+  newTag: f3986d0
