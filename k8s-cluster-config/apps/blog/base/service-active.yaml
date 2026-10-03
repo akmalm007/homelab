@@ -1,0 +1,13 @@
+# service-active.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: blog-active
+spec:
+  type: ClusterIP
+  selector:
+    app: blog-canary-test # deliberately different from the live selector — see below
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80

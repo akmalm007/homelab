@@ -5,6 +5,10 @@ resources:
   - deployment.yaml
   - service.yaml
   - httproute.yaml
+  - rollout.yaml
+  - service-active.yaml
+  - service-preview.yaml
+
 images:
   - name: git.akmalmaulana.net/akmalm007/blog
     newTag: placeholder
