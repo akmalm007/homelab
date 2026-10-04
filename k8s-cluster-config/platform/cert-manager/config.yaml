@@ -1,0 +1,7 @@
+crds:
+  enabled: false # CRDs already installed; don't let the chart manage them
+
+config:
+  apiVersion: controller.config.cert-manager.io/v2alpha1
+  kind: ControllerConfiguration
+  enableGatewayAPI: true
