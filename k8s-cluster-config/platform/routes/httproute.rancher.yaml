@@ -5,7 +5,7 @@ metadata:
   namespace: cattle-system
 spec:
   parentRefs:
-    - name: envoy-gateway
+    - name: envoy-gateway-internal
       namespace: production
       sectionName: rancher
   hostnames:

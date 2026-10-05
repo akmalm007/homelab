@@ -67,27 +67,27 @@ spec:
         certificateRefs:
           - name: uptime-akmalmaulana-net-tls
             kind: Secret
-    - name: argocd
-      port: 443
-      protocol: HTTPS
-      hostname: argocd.akmalmaulana.net
-      allowedRoutes:
-        namespaces:
-          from: All
-      tls:
-        mode: Terminate
-        certificateRefs:
-          - name: argocd-akmalmaulana-net-tls
-            kind: Secret
-    - name: rancher
-      port: 443
-      protocol: HTTPS
-      hostname: rancher.akmalmaulana.net
-      allowedRoutes:
-        namespaces:
-          from: All
-      tls:
-        mode: Terminate
-        certificateRefs:
-          - name: rancher-akmalmaulana-net-tls
-            kind: Secret
+    # - name: argocd
+    #   port: 443
+    #   protocol: HTTPS
+    #   hostname: argocd.akmalmaulana.net
+    #   allowedRoutes:
+    #     namespaces:
+    #       from: All
+    #   tls:
+    #     mode: Terminate
+    #     certificateRefs:
+    #       - name: argocd-akmalmaulana-net-tls
+    #         kind: Secret
+    # - name: rancher
+    #   port: 443
+    #   protocol: HTTPS
+    #   hostname: rancher.akmalmaulana.net
+    #   allowedRoutes:
+    #     namespaces:
+    #       from: All
+    #   tls:
+    #     mode: Terminate
+    #     certificateRefs:
+    #       - name: rancher-akmalmaulana-net-tls
+    #         kind: Secret
