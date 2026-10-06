@@ -12,5 +12,5 @@ spec:
     - prometheus.akmalmaulana.net
   rules:
     - backendRefs:
-        - name: prometheus
+        - name: prometheus-service
           port: 80
