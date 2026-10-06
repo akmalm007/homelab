@@ -9,7 +9,7 @@ spec:
       namespace: production
       sectionName: prometheus
   hostnames:
-    - prometheus.akmalmaulana.net
+    - prom.akmalmaulana.net
   rules:
     - backendRefs:
         - name: prometheus-service
