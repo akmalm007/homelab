@@ -3,3 +3,4 @@ kind: Kustomization
 resources:
   - httproute.argocd.yaml
   - httproute.rancher.yaml
+  - httproute.prometheus.yaml

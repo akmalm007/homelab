@@ -37,3 +37,15 @@ spec:
         certificateRefs:
           - name: argocd-akmalmaulana-net-tls
             kind: Secret
+    - name: prometheus
+      port: 443
+      protocol: HTTPS
+      hostname: prom.akmalmaulana.net
+      allowedRoutes:
+        namespaces:
+          from: All
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: prom-akmalmaulana-net-tls
+            kind: Secret

@@ -3,3 +3,4 @@ kind: Kustomization
 resources:
   - eproxy.tailscale.yaml
   - gtw.internal-tailscale.yaml
+  - ciss.letsencrypt-dns.yaml

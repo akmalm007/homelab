@@ -6,3 +6,4 @@ PAT
 SECRET-TOKEN
 backups/
 logs/
+k8s-cluster-config/secret/
