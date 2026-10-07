@@ -12,5 +12,5 @@ spec:
     - headlamp.akmalmaulana.net
   rules:
     - backendRefs:
-        - name: headlamp
+        - name: my-headlamp
           port: 80
