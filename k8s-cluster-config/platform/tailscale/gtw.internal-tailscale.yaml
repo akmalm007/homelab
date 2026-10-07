@@ -49,3 +49,15 @@ spec:
         certificateRefs:
           - name: prom-akmalmaulana-net-tls
             kind: Secret
+    - name: headlamp
+      port: 443
+      protocol: HTTPS
+      hostname: headlamp.akmalmaulana.net
+      allowedRoutes:
+        namespaces:
+          from: All
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: headlamp-akmalmaulana-net-tls
+            kind: Secret

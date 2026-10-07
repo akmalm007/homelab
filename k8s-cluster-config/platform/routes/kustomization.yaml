@@ -4,3 +4,4 @@ resources:
   - httproute.argocd.yaml
   - httproute.rancher.yaml
   - httproute.prometheus.yaml
+  - httproute.headlamp.yaml
